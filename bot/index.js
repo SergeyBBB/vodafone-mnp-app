@@ -13,8 +13,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Web app URL (will be updated after deployment)
-const webAppUrl = 'http://localhost:5181';
+// Web app URL (deployed on Vercel)
+const webAppUrl = 'https://vodafone-mnp-app.vercel.app';
 
 // Command handler for /start
 bot.onText(/\/start/, async (msg) => {
