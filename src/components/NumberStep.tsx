@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 interface NumberStepProps {
-  onNext: (number: string, verificationMethod: string) => void;
+  onNext: (data: { phone: string, verificationMethod: string }) => void;
   onBack: () => void;
 }
 
@@ -76,9 +76,10 @@ export function NumberStep({ onNext, onBack }: NumberStepProps) {
   };
 
   const handleSubmit = () => {
-    if (isValidPhoneNumber(phoneNumber) && verificationMethod) {
-      onNext(phoneNumber, verificationMethod);
-    }
+    onNext({
+      phone: phoneNumber,
+      verificationMethod: verificationMethod
+    });
   };
 
   return (

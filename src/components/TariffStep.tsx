@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface TariffStepProps {
-  onNext: (tariffId: string) => void;
+  onNext: (data: any) => void;
   onBack: () => void;
 }
 
@@ -9,24 +9,24 @@ const TARIFFS = [
   {
     id: 'unlimited',
     name: 'Безліміт',
-    price: '300₴/міс',
+    price: '375₴/міс',
     recommended: true,
     features: [
       '🌐 Безлімітний інтернет',
       '📞 Безлімітні дзвінки',
       '✉️ Безлімітні SMS',
-      '🌍 20 ГБ роумінг в ЄС'
+      '🌍 100 хвилин за кордон'
     ]
   },
   {
     id: 'superNet',
-    name: 'SuperNet',
+    name: 'SuperNet Start',
     price: '250₴/міс',
     features: [
-      '🌐 25 ГБ інтернет',
-      '📞 3000 хвилин',
-      '✉️ 100 SMS',
-      '🌍 10 ГБ роумінг в ЄС'
+      '🌐 20 ГБ інтернету',
+      '📞 Безлімітні дзвінки',
+      '✉️ 50 SMS',
+      '🌍 50 хвилин за кордон'
     ]
   },
   {
@@ -43,27 +43,52 @@ const TARIFFS = [
 ];
 
 export function TariffStep({ onNext, onBack }: TariffStepProps) {
-  const [selectedTariff, setSelectedTariff] = React.useState<string>('');
+  const [selectedTariff, setSelectedTariff] = useState('');
+
+  const handleSubmit = () => {
+    const tariff = TARIFFS.find(t => t.id === selectedTariff);
+    onNext({
+      tariff: tariff?.name,
+      tariffPrice: tariff?.price
+    });
+  };
 
   return (
-    <div className="space-y-4 max-w-lg mx-auto">
-      <div className="space-y-3">
+    <div className="space-y-4 max-w-2xl mx-auto">
+      <div>
+        <h2 className="text-xl font-semibold text-gray-900">
+          Оберіть тарифний план
+        </h2>
+        <p className="mt-2 text-sm text-gray-500">
+          Оберіть тариф, який найкраще підходить вашим потребам. Ви зможете змінити його в будь-який час після переносу номера.
+        </p>
+      </div>
+
+      <div className="space-y-4 mt-6">
         {TARIFFS.map((tariff) => (
           <div
             key={tariff.id}
-            className={`bg-white rounded-lg border p-4 ${
+            className={`relative rounded-xl overflow-hidden transition-all duration-200 ${
               selectedTariff === tariff.id 
-                ? 'border-vodafone-red shadow-sm' 
-                : 'border-gray-100'
+                ? 'ring-2 ring-vodafone-red shadow-lg transform scale-[1.02]' 
+                : 'border border-gray-200 hover:border-gray-300 hover:shadow'
             }`}
           >
             <button
+              type="button"
               onClick={() => setSelectedTariff(tariff.id)}
               className="w-full text-left"
             >
-              <div className="flex items-start gap-3">
-                {/* Radio button */}
-                <div className="mt-1">
+              <div className="p-6">
+                {tariff.recommended && (
+                  <div className="absolute top-3 right-3">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      Рекомендуємо
+                    </span>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between mb-4">
                   <div
                     className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                       selectedTariff === tariff.id
@@ -77,30 +102,23 @@ export function TariffStep({ onNext, onBack }: TariffStepProps) {
                   </div>
                 </div>
 
-                {/* Content */}
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {tariff.name}
-                    </h3>
-                    {tariff.recommended && (
-                      <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-800">
-                        Рекомендуємо
-                      </span>
-                    )}
-                  </div>
-                  
-                  <div className="text-xl font-bold text-vodafone-red mb-2">
-                    {tariff.price}
-                  </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  {tariff.name}
+                </h3>
+                
+                <div className="text-2xl font-bold text-vodafone-red mb-4">
+                  {tariff.price}
+                </div>
 
-                  <div className="space-y-1.5">
-                    {tariff.features.map((feature, index) => (
-                      <div key={index} className="text-sm text-gray-600">
-                        {feature}
-                      </div>
-                    ))}
-                  </div>
+                <div className="space-y-3">
+                  {tariff.features.map((feature, index) => (
+                    <div 
+                      key={index} 
+                      className="flex items-start text-sm text-gray-600"
+                    >
+                      <span className="mr-2">{feature}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </button>
@@ -108,17 +126,19 @@ export function TariffStep({ onNext, onBack }: TariffStepProps) {
         ))}
       </div>
 
-      <div className="flex gap-3 mt-6">
+      <div className="flex gap-3 mt-8">
         <button
+          type="button"
           onClick={onBack}
-          className="btn btn-secondary"
+          className="flex-1 py-2.5 px-4 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-vodafone-red"
         >
           Назад
         </button>
         <button
-          onClick={() => selectedTariff && onNext(selectedTariff)}
+          type="button"
+          onClick={handleSubmit}
           disabled={!selectedTariff}
-          className="btn btn-primary flex-1"
+          className="flex-1 py-2.5 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-vodafone-red hover:bg-vodafone-red/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-vodafone-red disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Продовжити
         </button>

@@ -26,8 +26,9 @@ export function App() {
   const [currentStep, setCurrentStep] = useState(1);
   const [stepData, setStepData] = useState<StepData>({});
 
-  const handleNext = (data: any) => {
-    setStepData((prev) => ({ ...prev, ...data }));
+  const handleNext = (data: StepData) => {
+    const newStepData = { ...stepData, ...data };
+    setStepData(newStepData);
     
     // Skip delivery step for eSIM
     if (currentStep === 3 && data.sim?.isESim) {
@@ -52,9 +53,9 @@ export function App() {
       case 4:
         return <DeliveryStep onNext={handleNext} onBack={handleBack} />;
       case 5:
-        return <StatusStep data={stepData} onBack={handleBack} />;
+        return <StatusStep formData={stepData} onBack={handleBack} />;
       default:
-        return <StatusStep data={stepData} onBack={handleBack} />;
+        return null;
     }
   };
 
@@ -66,7 +67,7 @@ export function App() {
         <div className="max-w-2xl mx-auto mb-6">
           <div className="flex items-center justify-between">
             <img
-              src="/vodafone-logo.svg"
+              src="/vodafone-logo.png"
               alt="Vodafone"
               className="h-8"
             />

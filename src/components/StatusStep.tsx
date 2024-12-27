@@ -10,9 +10,10 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 
 interface StatusStepProps {
-  data: {
-    number?: { phone: string; verificationMethod: string };
-    tariff?: string;
+  formData: {
+    phone: string;
+    tariff: string;
+    tariffPrice: string;
     sim?: { type: string; isESim: boolean; email?: string };
     delivery?: {
       method: string;
@@ -27,8 +28,8 @@ interface StatusStepProps {
   onBack: () => void;
 }
 
-export function StatusStep({ data, onBack }: StatusStepProps) {
-  const isEsim = data.sim?.isESim;
+export function StatusStep({ formData, onBack }: StatusStepProps) {
+  const isESim = formData.sim?.isESim;
 
   const getStatusSteps = () => {
     const steps = [
@@ -39,8 +40,8 @@ export function StatusStep({ data, onBack }: StatusStepProps) {
         completed: true
       },
       {
-        label: isEsim ? 'Підготовка eSIM' : 'Підготовка SIM-карти',
-        description: isEsim 
+        label: isESim ? 'Підготовка eSIM' : 'Підготовка SIM-карти',
+        description: isESim 
           ? 'Ми готуємо вашу eSIM для активації'
           : 'Ми підготували вашу SIM-карту до відправки',
         icon: <SimCardIcon />,
@@ -48,10 +49,10 @@ export function StatusStep({ data, onBack }: StatusStepProps) {
       }
     ];
 
-    if (!isEsim) {
+    if (!isESim) {
       steps.push({
         label: 'Відправлення',
-        description: `Очікується відправлення на відділення ${data.delivery?.novaPoshtaData?.city}, ${data.delivery?.novaPoshtaData?.warehouse}`,
+        description: `Очікується відправлення на відділення ${formData.delivery?.novaPoshtaData?.city}, ${formData.delivery?.novaPoshtaData?.warehouse}`,
         icon: <LocalShippingIcon />,
         completed: false
       });
@@ -64,7 +65,7 @@ export function StatusStep({ data, onBack }: StatusStepProps) {
       completed: false
     });
 
-    if (isEsim) {
+    if (isESim) {
       steps.push({
         label: 'Відправка eSIM',
         description: 'Очікується відправка eSIM на вказану email адресу',
@@ -77,77 +78,41 @@ export function StatusStep({ data, onBack }: StatusStepProps) {
   };
 
   return (
-    <Box>
+    <Box sx={{ maxWidth: 600, mx: 'auto' }}>
       <Typography variant="h6" gutterBottom>
-        Статус замовлення
+        {isESim ? 'Статус замовлення eSIM' : 'Статус замовлення SIM-карти'}
       </Typography>
-      
-      {/* Информация о заказе */}
-      <Paper elevation={0} sx={{ bgcolor: 'background.default', p: 3, mb: 3 }}>
-        <Typography variant="subtitle1" gutterBottom color="primary">
+
+      {/* Order Summary */}
+      <Paper sx={{ p: 3, mb: 3 }}>
+        <Typography variant="subtitle1" gutterBottom>
           Інформація про замовлення
         </Typography>
-        
-        <Box sx={{ display: 'grid', gap: 2 }}>
-          <Box>
-            <Typography variant="body2" color="text.secondary">
-              Номер телефону
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            <strong>Номер телефону:</strong> {formData.phone}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            <strong>Тарифний план:</strong> {formData.tariff} ({formData.tariffPrice} ₴/міс)
+          </Typography>
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            <strong>Тип SIM-карти:</strong> {isESim ? 'eSIM' : 'Фізична SIM-карта'}
+          </Typography>
+          {isESim && (
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              <strong>Email для отримання eSIM:</strong> {formData.sim?.email}
             </Typography>
-            <Typography variant="body1">
-              {data.number?.phone}
-            </Typography>
-          </Box>
-
-          <Box>
-            <Typography variant="body2" color="text.secondary">
-              Тарифний план
-            </Typography>
-            <Typography variant="body1">
-              {data.tariff}
-            </Typography>
-          </Box>
-
-          <Box>
-            <Typography variant="body2" color="text.secondary">
-              Тип SIM-карти
-            </Typography>
-            <Typography variant="body1">
-              {isEsim ? 'eSIM' : 'Фізична SIM-карта'}
-            </Typography>
-          </Box>
-
-          {isEsim && (
-            <Box>
-              <Typography variant="body2" color="text.secondary">
-                Email для отримання eSIM
-              </Typography>
-              <Typography variant="body1">
-                {data.sim?.email}
-              </Typography>
-            </Box>
           )}
-
-          {!isEsim && data.delivery && (
+          {!isESim && formData.delivery && (
             <>
               <Divider sx={{ my: 1 }} />
-              <Box>
-                <Typography variant="body2" color="text.secondary">
-                  Отримувач
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                <strong>Отримувач:</strong> {formData.delivery.firstName} {formData.delivery.lastName}
+              </Typography>
+              {formData.delivery.novaPoshtaData && (
+                <Typography variant="body2" color="text.secondary" gutterBottom>
+                  <strong>Адреса доставки:</strong> м. {formData.delivery.novaPoshtaData.city}, {formData.delivery.novaPoshtaData.warehouse}
                 </Typography>
-                <Typography variant="body1">
-                  {data.delivery.firstName} {data.delivery.lastName}
-                </Typography>
-              </Box>
-              
-              {data.delivery.novaPoshtaData && (
-                <Box>
-                  <Typography variant="body2" color="text.secondary">
-                    Адреса доставки
-                  </Typography>
-                  <Typography variant="body1">
-                    м. {data.delivery.novaPoshtaData.city}, {data.delivery.novaPoshtaData.warehouse}
-                  </Typography>
-                </Box>
               )}
             </>
           )}
@@ -155,8 +120,8 @@ export function StatusStep({ data, onBack }: StatusStepProps) {
       </Paper>
 
       {/* Timeline */}
-      <Paper elevation={0} sx={{ bgcolor: 'background.default', p: 3, mb: 3 }}>
-        <Typography variant="subtitle1" gutterBottom color="primary">
+      <Paper sx={{ p: 3, mb: 3 }}>
+        <Typography variant="subtitle1" gutterBottom>
           Статус перенесення
         </Typography>
         
@@ -182,7 +147,7 @@ export function StatusStep({ data, onBack }: StatusStepProps) {
         </Timeline>
 
         <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-          {isEsim 
+          {isESim 
             ? "Ми повідомимо вас, коли eSIM буде готова до активації та надішлемо інструкції щодо її встановлення."
             : "Ми повідомимо вас про відправлення SIM-карти та надамо номер для відстеження посилки."}
         </Typography>
