@@ -110,3 +110,69 @@ npm run build
 ---
 
 &copy; 2024 Vodafone Ukraine. Всі права захищені.
+
+## Telegram Mini App
+
+This is a Telegram Mini App for transferring mobile numbers to Vodafone Ukraine network.
+
+### Features
+
+- Phone number validation
+- Tariff plan selection
+- eSIM support with device compatibility check
+- Integration with Telegram Mini Apps
+- Real-time status updates
+
+### Development
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Start the development server:
+```bash
+npm run dev
+```
+
+3. Start the Telegram bot (in a separate terminal):
+```bash
+cd bot
+npm install
+npm start
+```
+
+### Deployment
+
+The application is configured for deployment on Vercel:
+
+1. Push your changes to GitHub
+2. Connect your repository to Vercel
+3. Vercel will automatically deploy your changes
+
+### Bot Commands
+
+- `/start` - Start the number transfer process
+- More commands coming soon...
+
+### Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+VITE_APP_URL=your-vercel-url
+```
+
+Create a `.env` file in the bot directory:
+
+```env
+TELEGRAM_BOT_TOKEN=your-bot-token
+```
+
+### Tech Stack
+
+- React + Vite
+- TypeScript
+- Material-UI
+- Node.js + Express (for bot)
+- Telegram Bot API
