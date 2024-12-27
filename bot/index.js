@@ -20,11 +20,14 @@ const webAppUrl = 'https://vodafone-mnp-app.vercel.app';
 bot.onText(/\/start/, async (msg) => {
   const chatId = msg.chat.id;
   
-  await bot.sendMessage(chatId, 'Вітаємо! Оберіть опцію нижче:', {
+  await bot.sendMessage(chatId, 'Вітаємо! Оберіть опцію:', {
     reply_markup: {
-      inline_keyboard: [
-        [{ text: 'Перенести номер до Vodafone', web_app: { url: webAppUrl } }]
-      ]
+      keyboard: [[{
+        text: 'Перенести номер до Vodafone',
+        web_app: { url: webAppUrl }
+      }]],
+      resize_keyboard: true,
+      one_time_keyboard: false
     }
   });
 });
