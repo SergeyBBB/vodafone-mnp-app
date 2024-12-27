@@ -79,38 +79,38 @@ export function TariffStep({ onNext, onBack }: TariffStepProps) {
               onClick={() => setSelectedTariff(tariff.id)}
               className="w-full text-left"
             >
-              <div className="p-6">
+              <div className="p-4">
                 {tariff.recommended && (
-                  <div className="absolute top-3 right-3">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                  <div className="absolute top-2 right-2">
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                       Рекомендуємо
                     </span>
                   </div>
                 )}
 
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-3">
                   <div
-                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                    className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                       selectedTariff === tariff.id
                         ? 'border-vodafone-red'
                         : 'border-gray-300'
                     }`}
                   >
                     {selectedTariff === tariff.id && (
-                      <div className="w-3 h-3 rounded-full bg-vodafone-red" />
+                      <div className="w-2 h-2 rounded-full bg-vodafone-red" />
                     )}
                   </div>
                 </div>
 
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                <h3 className="text-base font-semibold text-gray-900 mb-1">
                   {tariff.name}
                 </h3>
                 
-                <div className="text-2xl font-bold text-vodafone-red mb-4">
+                <div className="text-xl font-bold text-vodafone-red mb-3">
                   {tariff.price}
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2">
                   {tariff.features.map((feature, index) => (
                     <div 
                       key={index} 
