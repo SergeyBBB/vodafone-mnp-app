@@ -5,6 +5,21 @@ interface SimStepProps {
   onBack: () => void;
 }
 
+const SUPPORTED_DEVICES = [
+  {
+    brand: 'iPhone',
+    models: ['iPhone XS', 'iPhone XS Max', 'iPhone XR', 'iPhone 11', 'iPhone 11 Pro', 'iPhone 11 Pro Max', 'iPhone 12', 'iPhone 12 Mini', 'iPhone 12 Pro', 'iPhone 12 Pro Max', 'iPhone 13', 'iPhone 13 Mini', 'iPhone 13 Pro', 'iPhone 13 Pro Max', 'iPhone 14', 'iPhone 14 Plus', 'iPhone 14 Pro', 'iPhone 14 Pro Max', 'iPhone 15', 'iPhone 15 Plus', 'iPhone 15 Pro', 'iPhone 15 Pro Max']
+  },
+  {
+    brand: 'Samsung',
+    models: ['Galaxy S20', 'Galaxy S20+', 'Galaxy S20 Ultra', 'Galaxy S21', 'Galaxy S21+', 'Galaxy S21 Ultra', 'Galaxy S22', 'Galaxy S22+', 'Galaxy S22 Ultra', 'Galaxy S23', 'Galaxy S23+', 'Galaxy S23 Ultra', 'Galaxy Z Fold 2', 'Galaxy Z Fold 3', 'Galaxy Z Fold 4', 'Galaxy Z Flip 3', 'Galaxy Z Flip 4']
+  },
+  {
+    brand: 'Google Pixel',
+    models: ['Pixel 3', 'Pixel 3 XL', 'Pixel 3a', 'Pixel 3a XL', 'Pixel 4', 'Pixel 4 XL', 'Pixel 4a', 'Pixel 5', 'Pixel 5a', 'Pixel 6', 'Pixel 6 Pro', 'Pixel 6a', 'Pixel 7', 'Pixel 7 Pro', 'Pixel 7a', 'Pixel 8', 'Pixel 8 Pro']
+  }
+];
+
 const SIM_OPTIONS = [
   {
     id: 'physical',
@@ -31,6 +46,7 @@ const SIM_OPTIONS = [
 export function SimStep({ onNext, onBack }: SimStepProps) {
   const [selectedSim, setSelectedSim] = useState('');
   const [email, setEmail] = useState('');
+  const [showDevices, setShowDevices] = useState(false);
 
   const handleSubmit = () => {
     onNext({
@@ -65,7 +81,14 @@ export function SimStep({ onNext, onBack }: SimStepProps) {
           >
             <button
               type="button"
-              onClick={() => setSelectedSim(option.id)}
+              onClick={() => {
+                setSelectedSim(option.id);
+                if (option.id === 'esim') {
+                  setShowDevices(true);
+                } else {
+                  setShowDevices(false);
+                }
+              }}
               className="w-full text-left"
             >
               <div className="p-4">
@@ -108,22 +131,42 @@ export function SimStep({ onNext, onBack }: SimStepProps) {
       </div>
 
       {selectedSim === 'esim' && (
-        <div className="mt-6">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-            Email для отримання eSIM
-          </label>
-          <div className="mt-1">
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-vodafone-red focus:ring-vodafone-red sm:text-sm"
-              placeholder="example@email.com"
-              required={selectedSim === 'esim'}
-            />
+        <>
+          <div className="mt-6">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              Email для отримання eSIM
+            </label>
+            <div className="mt-1">
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-vodafone-red focus:ring-vodafone-red sm:text-sm"
+                placeholder="example@email.com"
+                required={selectedSim === 'esim'}
+              />
+            </div>
           </div>
-        </div>
+
+          <div className="mt-6 bg-gray-50 rounded-xl p-4">
+            <h4 className="text-sm font-medium text-gray-900 mb-3">
+              Підтримувані пристрої
+            </h4>
+            <div className="space-y-4">
+              {SUPPORTED_DEVICES.map((device) => (
+                <div key={device.brand} className="space-y-1">
+                  <h5 className="text-sm font-medium text-gray-900">
+                    {device.brand}
+                  </h5>
+                  <p className="text-sm text-gray-500">
+                    {device.models.join(', ')}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
       )}
 
       <div className="flex gap-3 mt-8">
