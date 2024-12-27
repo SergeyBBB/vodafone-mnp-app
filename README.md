@@ -1,50 +1,112 @@
-# React + TypeScript + Vite
+# Vodafone MNP App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Vodafone Logo](/public/vodafone-logo.png)
 
-Currently, two official plugins are available:
+## Про проект
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Vodafone MNP App - це сучасний веб-додаток для переносу мобільного номера до мережі Vodafone Ukraine. Додаток розроблено з використанням передових технологій та з урахуванням найкращих практик UX/UI дизайну.
 
-## Expanding the ESLint configuration
+### Основні можливості
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Простий процес переносу номера** - 5 простих кроків для переходу до Vodafone
+- **Підтримка eSIM** - можливість отримати цифрову SIM-карту
+- **Фізична SIM-карта** - доставка карти Новою Поштою
+- **Гнучкий вибір тарифів** - три тарифні плани для різних потреб
+- **Зручний інтерфейс** - інтуїтивно зрозумілий дизайн
 
-- Configure the top-level `parserOptions` property like this:
+## Технології
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- React
+- TypeScript
+- Tailwind CSS
+- Material-UI (MUI)
+- Vite
+
+## Кроки переносу номера
+
+1. **Введення номера телефону**
+   - Перевірка доступності номера для переносу
+   - Верифікація через SMS або дзвінок
+
+2. **Вибір тарифного плану**
+   - Безліміт
+   - SuperNet Start
+   - Базовий тариф
+   - Детальний опис переваг кожного тарифу
+
+3. **Вибір типу SIM-карти**
+   - eSIM з миттєвою активацією
+   - Фізична SIM-карта з доставкою
+   - Список підтримуваних пристроїв для eSIM
+
+4. **Оформлення доставки** (для фізичної SIM)
+   - Інтеграція з Новою Поштою
+   - Вибір відділення
+   - Введення даних отримувача
+
+5. **Підтвердження та статус**
+   - Відстеження статусу переносу
+   - Інструкції з активації
+   - Інформація про доставку
+
+## Запуск проекту
+
+```bash
+# Встановлення залежностей
+npm install
+
+# Запуск в режимі розробки
+npm run dev
+
+# Збірка для продакшену
+npm run build
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Підтримувані пристрої для eSIM
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+### iPhone
+- iPhone XS/XS Max/XR
+- iPhone 11/11 Pro/11 Pro Max
+- iPhone 12/12 Mini/12 Pro/12 Pro Max
+- iPhone 13/13 Mini/13 Pro/13 Pro Max
+- iPhone 14/14 Plus/14 Pro/14 Pro Max
+- iPhone 15/15 Plus/15 Pro/15 Pro Max
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### Samsung
+- Galaxy S20/S20+/S20 Ultra
+- Galaxy S21/S21+/S21 Ultra
+- Galaxy S22/S22+/S22 Ultra
+- Galaxy S23/S23+/S23 Ultra
+- Galaxy Z Fold 2/3/4
+- Galaxy Z Flip 3/4
+
+### Google Pixel
+- Pixel 3/3 XL/3a/3a XL
+- Pixel 4/4 XL/4a
+- Pixel 5/5a
+- Pixel 6/6 Pro/6a
+- Pixel 7/7 Pro/7a
+- Pixel 8/8 Pro
+
+## Внесок у проект
+
+Ми відкриті до пропозицій щодо покращення проекту. Якщо у вас є ідеї або ви знайшли помилку:
+
+1. Створіть Issue
+2. Запропонуйте Pull Request
+3. Опишіть ваші зміни
+4. Дочекайтеся review
+
+## Ліцензія
+
+Цей проект розповсюджується під ліцензією MIT. Дивіться файл [LICENSE](LICENSE) для отримання додаткової інформації.
+
+## Контакти
+
+Якщо у вас виникли питання або пропозиції, звертайтеся:
+- [Vodafone Ukraine](https://www.vodafone.ua)
+- [Підтримка](https://www.vodafone.ua/support)
+
+---
+
+&copy; 2024 Vodafone Ukraine. Всі права захищені.
