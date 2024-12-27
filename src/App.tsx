@@ -48,7 +48,7 @@ export function App() {
       case 5:
         return <StatusStep data={stepData} onBack={handleBack} />;
       default:
-        return null;
+        return <StatusStep data={stepData} onBack={handleBack} />;
     }
   };
 
@@ -69,42 +69,43 @@ export function App() {
             </h1>
           </div>
 
-          {/* Stepper */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between">
-              {[1, 2, 3, 4].map((step) => (
-                <React.Fragment key={step}>
-                  <div className="flex flex-col items-center">
-                    <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        step <= currentStep
-                          ? 'bg-vodafone-red text-white'
-                          : 'bg-gray-200 text-gray-500'
-                      }`}
-                    >
-                      {step}
-                    </div>
-                    <div className="text-xs text-gray-500 mt-1">
-                      {step === 1 && 'Номер'}
-                      {step === 2 && 'Тариф'}
-                      {step === 3 && 'SIM-карта'}
-                      {step === 4 && (stepData.sim?.isESim ? 'Статус' : 'Доставка')}
-                    </div>
-                  </div>
-                  {step < 4 && (
-                    <div
-                      className={`flex-1 h-0.5 mx-2 ${
-                        step < currentStep ? 'bg-vodafone-red' : 'bg-gray-200'
-                      }`}
-                    />
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-          </div>
-
           {/* Content */}
-          <div className="bg-white shadow rounded-lg">
+          <div className="bg-white shadow rounded-lg max-w-2xl mx-auto">
+            {/* Stepper */}
+            <div className="px-6 pt-6">
+              <div className="flex items-center justify-between max-w-xl mx-auto">
+                {[1, 2, 3, 4, 5].map((step) => (
+                  <React.Fragment key={step}>
+                    <div className="flex flex-col items-center">
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                          step <= currentStep
+                            ? 'bg-vodafone-red text-white'
+                            : 'bg-gray-200 text-gray-500'
+                        }`}
+                      >
+                        {step}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {step === 1 && 'Номер'}
+                        {step === 2 && 'Тариф'}
+                        {step === 3 && 'SIM-карта'}
+                        {step === 4 && 'Доставка'}
+                        {step === 5 && 'Статус'}
+                      </div>
+                    </div>
+                    {step < 5 && (
+                      <div
+                        className={`flex-1 h-0.5 mx-2 ${
+                          step < currentStep ? 'bg-vodafone-red' : 'bg-gray-200'
+                        }`}
+                      />
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+
             <div className="p-6">
               {renderStep()}
             </div>

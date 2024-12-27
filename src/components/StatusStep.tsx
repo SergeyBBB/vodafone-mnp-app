@@ -1,161 +1,176 @@
 import React from 'react';
+import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot } from '@mui/lab';
+import { Paper, Typography, Button, Box, Divider } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import PhoneForwardedIcon from '@mui/icons-material/PhoneForwarded';
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
+import SimCardIcon from '@mui/icons-material/SimCard';
 
 interface StatusStepProps {
-  number: string;
-  verificationMethod: string;
-  tariff: string;
-  sim: {
-    type: string;
-    isESim: boolean;
-  };
-  delivery: {
-    method: string;
-    firstName?: string;
-    lastName?: string;
-    novaPoshtaData?: {
-      city: string;
-      warehouse: string;
+  data: {
+    number?: { phone: string; verificationMethod: string };
+    tariff?: string;
+    sim?: { type: string; isESim: boolean };
+    delivery?: {
+      method: string;
+      firstName: string;
+      lastName: string;
+      novaPoshtaData?: {
+        city: string;
+        warehouse: string;
+      };
     };
   };
   onBack: () => void;
 }
 
-export function StatusStep({
-  number,
-  verificationMethod,
-  tariff,
-  sim,
-  delivery,
-  onBack
-}: StatusStepProps) {
-  const getVerificationMethodName = (method: string) => {
-    switch (method) {
-      case 'bankid':
-        return 'BankID';
-      case 'dia':
-        return 'Дія';
-      default:
-        return method;
+export function StatusStep({ data, onBack }: StatusStepProps) {
+  const isEsim = data.sim?.isESim;
+
+  const getStatusSteps = () => {
+    const steps = [
+      {
+        label: 'Замовлення прийнято',
+        description: 'Ми отримали вашу заявку на перенесення номера',
+        icon: <CheckIcon />,
+        completed: true
+      },
+      {
+        label: isEsim ? 'Підготовка eSIM' : 'Підготовка SIM-карти',
+        description: isEsim 
+          ? 'Ми готуємо вашу eSIM для активації'
+          : 'Ми підготували вашу SIM-карту до відправки',
+        icon: <SimCardIcon />,
+        completed: true
+      }
+    ];
+
+    if (!isEsim) {
+      steps.push({
+        label: 'Відправлення',
+        description: `Очікується відправлення на відділення ${data.delivery?.novaPoshtaData?.city}, ${data.delivery?.novaPoshtaData?.warehouse}`,
+        icon: <LocalShippingIcon />,
+        completed: false
+      });
     }
+
+    steps.push({
+      label: 'Перенесення номера',
+      description: 'Очікується підтвердження від поточного оператора',
+      icon: <PhoneForwardedIcon />,
+      completed: false
+    });
+
+    return steps;
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-lg font-medium text-gray-900 mb-4">
-          Дані вашої заявки
-        </h2>
+    <Box>
+      <Typography variant="h6" gutterBottom>
+        Статус замовлення
+      </Typography>
+      
+      {/* Информация о заказе */}
+      <Paper elevation={0} sx={{ bgcolor: 'background.default', p: 3, mb: 3 }}>
+        <Typography variant="subtitle1" gutterBottom color="primary">
+          Інформація про замовлення
+        </Typography>
+        
+        <Box sx={{ display: 'grid', gap: 2 }}>
+          <Box>
+            <Typography variant="body2" color="text.secondary">
+              Номер телефону
+            </Typography>
+            <Typography variant="body1">
+              {data.number?.phone}
+            </Typography>
+          </Box>
 
-        {/* Application Details */}
-        <div className="bg-gray-50 rounded-lg p-4 space-y-4">
-          {/* Phone Number */}
-          <div>
-            <h3 className="text-sm font-medium text-gray-500">Номер телефону</h3>
-            <p className="mt-1 text-sm text-gray-900">{number}</p>
-          </div>
+          <Box>
+            <Typography variant="body2" color="text.secondary">
+              Тарифний план
+            </Typography>
+            <Typography variant="body1">
+              {data.tariff}
+            </Typography>
+          </Box>
 
-          {/* Verification Method */}
-          <div>
-            <h3 className="text-sm font-medium text-gray-500">Спосіб верифікації</h3>
-            <p className="mt-1 text-sm text-gray-900">
-              {getVerificationMethodName(verificationMethod)}
-            </p>
-          </div>
+          <Box>
+            <Typography variant="body2" color="text.secondary">
+              Тип SIM-карти
+            </Typography>
+            <Typography variant="body1">
+              {isEsim ? 'eSIM' : 'Фізична SIM-карта'}
+            </Typography>
+          </Box>
 
-          {/* Tariff */}
-          <div>
-            <h3 className="text-sm font-medium text-gray-500">Тарифний план</h3>
-            <p className="mt-1 text-sm text-gray-900">{tariff}</p>
-          </div>
-
-          {/* SIM Type */}
-          <div>
-            <h3 className="text-sm font-medium text-gray-500">Тип SIM-карти</h3>
-            <p className="mt-1 text-sm text-gray-900">
-              {sim.isESim ? 'eSIM' : 'Фізична SIM-карта'}
-            </p>
-          </div>
-
-          {/* Delivery Details */}
-          {!sim.isESim && delivery.method === 'nova_poshta' && (
-            <div>
-              <h3 className="text-sm font-medium text-gray-500">Доставка</h3>
-              <div className="mt-1 text-sm text-gray-900">
-                <p>Нова Пошта</p>
-                <p className="mt-1">
-                  {delivery.firstName} {delivery.lastName}
-                </p>
-                <p className="mt-1">
-                  {delivery.novaPoshtaData?.city}, відділення {delivery.novaPoshtaData?.warehouse}
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Next Steps */}
-      <div className="bg-blue-50 rounded-lg p-4">
-        <h3 className="text-sm font-medium text-blue-800 mb-2">
-          Наступні кроки
-        </h3>
-        <div className="space-y-2">
-          {sim.isESim ? (
+          {!isEsim && data.delivery && (
             <>
-              <p className="text-sm text-blue-700">
-                1. Очікуйте повідомлення в Telegram для верифікації
-              </p>
-              <p className="text-sm text-blue-700">
-                2. Після успішної верифікації ви отримаєте QR-код для активації eSIM
-              </p>
-              <p className="text-sm text-blue-700">
-                3. Відскануйте QR-код у налаштуваннях вашого телефону
-              </p>
-            </>
-          ) : (
-            <>
-              <p className="text-sm text-blue-700">
-                1. Очікуйте на SIM-карту у відділенні Нової Пошти
-              </p>
-              <p className="text-sm text-blue-700">
-                2. Отримайте SIM-карту, пред'явивши документ
-              </p>
-              <p className="text-sm text-blue-700">
-                3. Встановіть SIM-карту у ваш телефон
-              </p>
+              <Divider sx={{ my: 1 }} />
+              <Box>
+                <Typography variant="body2" color="text.secondary">
+                  Отримувач
+                </Typography>
+                <Typography variant="body1">
+                  {data.delivery.firstName} {data.delivery.lastName}
+                </Typography>
+              </Box>
+              
+              {data.delivery.novaPoshtaData && (
+                <Box>
+                  <Typography variant="body2" color="text.secondary">
+                    Адреса доставки
+                  </Typography>
+                  <Typography variant="body1">
+                    м. {data.delivery.novaPoshtaData.city}, {data.delivery.novaPoshtaData.warehouse}
+                  </Typography>
+                </Box>
+              )}
             </>
           )}
-        </div>
-      </div>
+        </Box>
+      </Paper>
 
-      {/* Support Info */}
-      <div className="bg-gray-50 rounded-lg p-4">
-        <h3 className="text-sm font-medium text-gray-900 mb-2">
-          Підтримка
-        </h3>
-        <p className="text-sm text-gray-600">
-          Якщо у вас виникли питання, зверніться до служби підтримки Vodafone:
-        </p>
-        <div className="mt-2 space-y-1">
-          <p className="text-sm text-gray-900">
-            • Телефон: <a href="tel:+380800400111" className="text-vodafone-red">0800 400 111</a>
-          </p>
-          <p className="text-sm text-gray-900">
-            • Email: <a href="mailto:support@vodafone.ua" className="text-vodafone-red">support@vodafone.ua</a>
-          </p>
-        </div>
-      </div>
+      {/* Timeline */}
+      <Paper elevation={0} sx={{ bgcolor: 'background.default', p: 3, mb: 3 }}>
+        <Typography variant="subtitle1" gutterBottom color="primary">
+          Статус перенесення
+        </Typography>
+        
+        <Timeline>
+          {getStatusSteps().map((step, index) => (
+            <TimelineItem key={index}>
+              <TimelineSeparator>
+                <TimelineDot color={step.completed ? "success" : "grey"}>
+                  {step.icon}
+                </TimelineDot>
+                {index < getStatusSteps().length - 1 && <TimelineConnector />}
+              </TimelineSeparator>
+              <TimelineContent>
+                <Typography variant="subtitle2">
+                  {step.label}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {step.description}
+                </Typography>
+              </TimelineContent>
+            </TimelineItem>
+          ))}
+        </Timeline>
 
-      {/* Back Button */}
-      <div className="flex justify-center">
-        <button
-          type="button"
-          onClick={onBack}
-          className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-vodafone-red"
-        >
-          На головну
-        </button>
-      </div>
-    </div>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+          {isEsim 
+            ? "Ми повідомимо вас, коли eSIM буде готова до активації та надішлемо інструкції щодо її встановлення."
+            : "Ми повідомимо вас про відправлення SIM-карти та надамо номер для відстеження посилки."}
+        </Typography>
+      </Paper>
+
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Button variant="outlined" onClick={onBack}>
+          Назад
+        </Button>
+      </Box>
+    </Box>
   );
 }
