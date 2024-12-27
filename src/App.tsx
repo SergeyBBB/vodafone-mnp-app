@@ -62,11 +62,11 @@ export function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="min-h-screen bg-gray-50 py-8">
-        <div className="container mx-auto px-4">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
+        {/* Header */}
+        <div className="max-w-2xl mx-auto mb-6">
+          <div className="flex items-center justify-between">
             <img
-              src="/Vodafone_logo_2017.png"
+              src="/vodafone-logo.svg"
               alt="Vodafone"
               className="h-8"
             />
@@ -74,8 +74,10 @@ export function App() {
               Перенесення номера
             </h1>
           </div>
+        </div>
 
-          {/* Content */}
+        {/* Content */}
+        <div className="container mx-auto px-4">
           <div className="bg-white shadow rounded-lg max-w-2xl mx-auto">
             {/* Stepper */}
             <div className="px-6 pt-6">
