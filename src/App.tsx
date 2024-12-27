@@ -28,7 +28,13 @@ export function App() {
 
   const handleNext = (data: any) => {
     setStepData((prev) => ({ ...prev, ...data }));
-    setCurrentStep((prev) => prev + 1);
+    
+    // Skip delivery step for eSIM
+    if (currentStep === 3 && data.sim?.isESim) {
+      setCurrentStep(5);
+    } else {
+      setCurrentStep((prev) => prev + 1);
+    }
   };
 
   const handleBack = () => {

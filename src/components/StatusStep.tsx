@@ -6,12 +6,14 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import PhoneForwardedIcon from '@mui/icons-material/PhoneForwarded';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import SimCardIcon from '@mui/icons-material/SimCard';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 
 interface StatusStepProps {
   data: {
     number?: { phone: string; verificationMethod: string };
     tariff?: string;
-    sim?: { type: string; isESim: boolean };
+    sim?: { type: string; isESim: boolean; email?: string };
     delivery?: {
       method: string;
       firstName: string;
@@ -62,6 +64,15 @@ export function StatusStep({ data, onBack }: StatusStepProps) {
       completed: false
     });
 
+    if (isEsim) {
+      steps.push({
+        label: 'Відправка eSIM',
+        description: 'Очікується відправка eSIM на вказану email адресу',
+        icon: <MailOutlineIcon />,
+        completed: false
+      });
+    }
+
     return steps;
   };
 
@@ -104,6 +115,17 @@ export function StatusStep({ data, onBack }: StatusStepProps) {
               {isEsim ? 'eSIM' : 'Фізична SIM-карта'}
             </Typography>
           </Box>
+
+          {isEsim && (
+            <Box>
+              <Typography variant="body2" color="text.secondary">
+                Email для отримання eSIM
+              </Typography>
+              <Typography variant="body1">
+                {data.sim?.email}
+              </Typography>
+            </Box>
+          )}
 
           {!isEsim && data.delivery && (
             <>
